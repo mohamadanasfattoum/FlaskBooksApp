@@ -73,5 +73,10 @@ def delete_book(id):
     db.session.commit()
     return redirect(url_for('index'))
 
+@app.route('/books/<int:id>')
+def book_detail(id):
+    book = Book.query.get_or_404(id)
+    return render_template("book_detail.html",book=book)
+
 if __name__== "__main__":
     app.run(debug=True)
