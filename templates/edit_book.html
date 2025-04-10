@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block body %}
+    <h3>Edit Book</h3>
+
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">Book Title</label>
+            <input type="text" name="title" class="form-control" value="{{book.title}}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Author Name</label>
+            <input type="text" name="author" class="form-control" value="{{book.author.name}}">
+        </div>
+        <button type="submit" class="btn btn-success" >Update Book</button>
+    </form>
+
+
+
+{% endblock body %}

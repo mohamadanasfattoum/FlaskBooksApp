@@ -43,6 +43,30 @@ def add_book():
 
     return render_template("add_book.html")
 
+@app.route('/edit/<int:id>',methods=['POST','GET'])
+def edit_book(id):
+    book = Book.query.get_or_404(id)
+
+    if request.method == 'POST':
+        title = request.form['title']
+        author_name = request.form['author']
+
+        # check if author with this name
+        author = Author.query.filter_by(name=author_name).first()
+        if not author:
+            author = Author(name=author_name)
+            db.session.add(author)
+            db.session.commit()
+
+        # create Book
+        book.author_id = author.id
+        book.title = title
+        db.session.commit()
+        return redirect(url_for('index'))
+
+    return render_template("edit_book.html",book=book)
+
+
 
 if __name__== "__main__":
     app.run(debug=True)
