@@ -1,1 +1,35 @@
-<h3>Hi</h3>
+{% extends "base.html" %}
+
+{% block body %}
+  
+
+
+    <h3>Books List</h3>
+
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td><a href="">{{book.title}}</a></td>
+                <td>{{book.author.name}}</td>
+                <td>
+                    <a href="" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+
+
+{% endblock body %}

@@ -1,4 +1,4 @@
-from flask import Flask , render_template
+from flask import Flask , render_template, request, redirect, url_for
 import os
 from models import db, Book, Author, Review
 app = Flask(__name__)
@@ -15,10 +15,33 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-@app.route('/welcome')
+@app.route('/')
 def index():
-    # logic
-    return render_template("index.html")
+    books = Book.query.all()
+    return render_template("index.html",books=books)
+
+@app.route('/add-book',methods=['POST','GET'])
+def add_book():
+    
+    if request.method == 'POST':
+        title = request.form['title']
+        author_name = request.form['author']
+
+        # check if author with this name
+        author = Author.query.filter_by(name=author_name).first()
+        if not author:
+            author = Author(name=author_name)
+            db.session.add(author)
+            db.session.commit()
+
+        # create Book
+        book = Book(title=title,author_id=author.id)
+        db.session.add(book)
+        db.session.commit()
+        return redirect(url_for('index'))
+
+
+    return render_template("add_book.html")
 
 
 if __name__== "__main__":
