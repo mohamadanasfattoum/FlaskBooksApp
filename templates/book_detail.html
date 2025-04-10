@@ -8,6 +8,15 @@
     <h5>Book Author: {{book.author.name}}</h5>
     <p>Content: {{book.content}}</p>
 
+    <h5>Reviews</h5>
+    <ul>
+        {% for review in book.reviews %}
+            <li>{{review.content}}</li>   
+        {% else %}
+            <li>No Reviews Yet.</li>       
+        {% endfor %}
+    </ul>
+
 
 
      

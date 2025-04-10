@@ -78,5 +78,17 @@ def book_detail(id):
     book = Book.query.get_or_404(id)
     return render_template("book_detail.html",book=book)
 
+
+@app.route('/search',methods=['POST','GET'])
+def search_books():
+    if request.method == 'POST':
+        query = request.form['query']
+        # print(f'query: {query}') # to testing
+        books = Book.query.filter(Book.title.ilike(f'%{query}%')).all()
+        authors = Author.query.filter(Author.name.ilike(f'%{query}%')).all()
+        return render_template("search.html",books=books,authors=authors,query=query)
+    return render_template("search.html")
+    
+
 if __name__== "__main__":
     app.run(debug=True)
