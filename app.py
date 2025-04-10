@@ -1,5 +1,5 @@
 from flask import Flask , render_template
-from .models import db
+from .models import db, Book, Author, Review
 app = Flask(__name__)
 
 # configuration SQLALCHEMY
