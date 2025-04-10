@@ -1,10 +1,12 @@
 from flask import Flask , render_template
+import os
 from models import db, Book, Author, Review
 app = Flask(__name__)
 
-# configuration SQLALCHEMY
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///books.db"
-# app.config[''] = ''
+# Configuration for SQLAlchemy - database will be created in current folder
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{os.path.join(basedir, 'books.db')}"
+# app.config[''] = '' 
 
 # initialize the app with the extension
 db.init_app(app)
