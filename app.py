@@ -1,5 +1,5 @@
 from flask import Flask , render_template
-from .models import db, Book, Author, Review
+from models import db, Book, Author, Review
 app = Flask(__name__)
 
 # configuration SQLALCHEMY
@@ -8,6 +8,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///books.db"
 
 # initialize the app with the extension
 db.init_app(app)
+
+# generate tables
+with app.app_context():
+    db.create_all()
 
 @app.route('/welcome')
 def index():
