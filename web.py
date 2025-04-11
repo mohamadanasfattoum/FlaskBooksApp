@@ -2,6 +2,8 @@ from flask import Flask , render_template, request, redirect, url_for
 from models import db, Book, Author, Review
 from app import app
 
+from tasks import send_book_notification
+
 @app.route('/')
 def index():
     books = Book.query.all()
@@ -25,9 +27,12 @@ def add_book():
         book = Book(title=title,author_id=author.id)
         db.session.add(book)
         db.session.commit()
+
+        # fire celery to send notification
+        send_book_notification.delay(book.id, book.title)
+
         return redirect(url_for('index'))
-
-
+    
     return render_template("add_book.html")
 
 @app.route('/edit/<int:id>',methods=['POST','GET'])
