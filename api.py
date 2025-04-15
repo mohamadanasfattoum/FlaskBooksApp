@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from app import app , db
 
 from models import Book, Author , Review
@@ -37,7 +37,21 @@ def get_book_api(id):
 @app.route('/api/books/<int:id>', methods=['PUT'])
 def update_book_api(id):
     book = Book.query.get_or_404(id)
-    return jsonify({'message': 'Book updated successfully'})
+
+    data = request.get_json()
+    title = data.get('title')
+    author_id = data.get('author_id') 
+    author = data.get('author')
+
+    if title:
+        book.title = title
+    if author:
+        book.author.name = author    
+    if author_id:
+        book.author_id = author_id
+    db.session.commit()
+
+    return jsonify(book_detail_to_dict(book))
 
 
 
