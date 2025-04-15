@@ -1,33 +1,31 @@
-# design models mit relations
-
 from flask_sqlalchemy import SQLAlchemy
 
-
+# Initialize SQLAlchemy for database operations
 db = SQLAlchemy()
 
-
+# Author model: Represents an author in the database
 class Author(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100),nullable=False)
-    
-    # ein Author hat auch books
-    books = db.relationship('Book',backref='author',lazy=True)
+    id = db.Column(db.Integer, primary_key=True)  # Primary key
+    name = db.Column(db.String(100), nullable=False)  # Author's name (required)
 
+    # One-to-many relationship: An author can have multiple books
+    books = db.relationship('Book', backref='author', lazy=True)
 
+# Book model: Represents a book in the database
 class Book(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100),nullable=False)
+    id = db.Column(db.Integer, primary_key=True)  # Primary key
+    title = db.Column(db.String(100), nullable=False)  # Book title (required)
 
-    # jedes Book hat ein Author id
-    author_id = db.Column(db.Integer,db.ForeignKey('author.id'),nullable=False)
+    # Foreign key: Each book is associated with one author
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
 
-    # ein book hat reviews
-    reviews = db.relationship('Review',backref='book',lazy=True)
+    # One-to-many relationship: A book can have multiple reviews
+    reviews = db.relationship('Review', backref='book', lazy=True)
 
+# Review model: Represents a review for a book
+class Review(db.Model):
+    id = db.Column(db.Integer, primary_key=True)  # Primary key
+    content = db.Column(db.Text, nullable=False)  # Review content (required)
 
-class Review (db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.Text,nullable=False)
-
-    # review hat auch book id für welches book es gehört
-    book_id = db.Column(db.Integer,db.ForeignKey('book.id'),nullable=False)
+    # Foreign key: Each review is associated with one book
+    book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
