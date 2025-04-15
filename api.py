@@ -65,5 +65,20 @@ def delete_book_api(id):
 
 @app.route('/api/books', methods=['POST'])
 def create_book_api():
-    pass
+    data = request.get_json()
+
+    title = data.get('title')
+    author_id = data.get('author_id') 
+
+    if not title or not author_id:
+        return jsonify({'error': 'Title and author_id are required'}), 400
+    
+    book = Book(title=title, author_id=author_id)
+    db.session.add(book)
+    db.session.commit()
+
+    books = Book.query.all()
+    return jsonify({
+        'books': [book_list_to_dict(book) for book in books]
+    })
  
